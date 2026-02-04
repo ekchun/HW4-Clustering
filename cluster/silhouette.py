@@ -12,6 +12,7 @@ class Silhouette:
     def score(self, X: np.ndarray, y: np.ndarray) -> np.ndarray:
         """
         calculates the silhouette score for each of the observations
+        s(i) = (b(i) - a(i)) / max(a(i), b(i))
 
         inputs:
             X: np.ndarray
@@ -24,3 +25,26 @@ class Silhouette:
             np.ndarray
                 a 1D array with the silhouette scores for each of the observations in `X`
         """
+        dist_matrix = cdist(X, X) # pairwise distance matrix
+
+        unique_labels = np.unique(y) # Get unique cluster labels, why?
+        n = len(X)
+        sil_scores = np.zeros(n)
+
+        for i in range(n):
+            label = y[i]
+
+            same_cluster = (y == label) # points in the same cluster
+            same_distances = dist_matrix[i, same_cluster]
+            a = np.mean(same_distances[same_distances != 0])  # a(i), exclude self
+        
+            b1 = []
+            for other_label in unique_labels:
+                if other_label != label:
+                    other_mask = (y == other_label)
+                    b = np.mean(dist_matrix[i, other_mask])
+                    b1.append(b)
+            b = min(b1) # b(i)
+        
+            sil_scores[i] = (b - a) / max(a, b)
+        return sil_scores
