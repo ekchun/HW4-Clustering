@@ -39,6 +39,17 @@ class KMeans:
         if type(self.max_iter) != int:
             raise TypeError("max_iter must be an integer")
 
+    def _initialize_centroids(self, mat: np.ndarray) -> np.ndarray:
+        """
+        Initializes k centroids randomly from the data points in mat.
+
+        inputs:
+            mat: np.ndarray
+                A 2D matrix where the rows are observations and columns are features
+        """
+        indices = np.random.choice(mat.shape[0], self.k, replace=False)
+        centroids = mat[indices]
+        return centroids
 
     def fit(self, mat: np.ndarray):
         """
@@ -55,9 +66,7 @@ class KMeans:
             mat: np.ndarray
                 A 2D matrix where the rows are observations and columns are features
         """
-        # initialize k centroids randomly
-        indices = np.random.choice(mat.shape[0], self.k, replace=False)
-        centroids = mat[indices]
+        centroids = self._initialize_centroids(mat)
 
         for i in range(self.max_iter):
             dist = cdist(mat, centroids) # calculate distances from points to centroids
