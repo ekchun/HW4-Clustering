@@ -20,6 +20,25 @@ class KMeans:
             max_iter: int
                 the maximum number of iterations before quitting model fit
         """
+        self.k = k
+        self.tol = tol
+        self.max_iter = max_iter
+
+        if self.k <= 0:
+            raise ValueError("k must be positive")
+        if type(self.k) != int:
+            raise TypeError("k must be an integer")
+        
+        if self.tol < 0:
+            raise ValueError("tolerance must be non-negative")
+        if type(self.tol) not in [float, int]:
+            raise TypeError("tolerance must be a float or integer")
+        
+        if self.max_iter <= 0:
+            raise ValueError("max_iter must be positive")
+        if type(self.max_iter) != int:
+            raise TypeError("max_iter must be an integer")
+
 
     def fit(self, mat: np.ndarray):
         """
@@ -36,6 +55,31 @@ class KMeans:
             mat: np.ndarray
                 A 2D matrix where the rows are observations and columns are features
         """
+        # initialize k centroids randomly
+        indices = np.random.choice(mat.shape[0], self.k, replace=False)
+        centroids = mat[indices]
+
+        for i in range(self.max_iter):
+            dist = cdist(mat, centroids) # calculate distances from points to centroids
+            labels = np.argmin(dist, axis=1) # assign labels based on closest centroid
+
+            # create new centroids
+            new_centroids = np.array([mat[labels == j].mean(axis=0) if np.sum(labels == j) > 0 
+                else centroids[j] # keep old centroid
+                for j in range(self.k)]) #loop thru
+
+            diff = centroids - new_centroids
+            shift = np.sqrt(np.sum(diff ** 2))  # calc Euclidean distance
+            centroids = new_centroids # update
+
+            if shift < self.tol: #convergence check
+                break
+
+        self.centroids = centroids # store for predict
+        # for error calculation
+        self.points = mat.copy()
+        self.labels = labels.copy()
+
 
     def predict(self, mat: np.ndarray) -> np.ndarray:
         """
@@ -53,6 +97,18 @@ class KMeans:
             np.ndarray
                 a 1D array with the cluster label for each of the observations in `mat`
         """
+        if self.centroids is None:
+            raise ValueError("Model has not been fitted yet. Please call 'fit' first.")
+        
+        # dimension match
+        if mat.shape[1] != self.centroids.shape[1]:
+            raise ValueError(f"Expected {self.centroids.shape[1]} features, got {mat.shape[1]}")
+        
+        dist = cdist(mat, self.centroids) # calculate distances from points to centroids
+        labels = np.argmin(dist, axis=1) # assign labels based on closest centroid
+
+        return labels
+
 
     def get_error(self) -> float:
         """
@@ -63,6 +119,13 @@ class KMeans:
             float
                 the squared-mean error of the fit model
         """
+        if self.centroids is None:
+            raise ValueError("Model has not been fitted yet. Please call 'fit' first.")
+
+        dist = cdist(self.points, self.centroids)
+        assigned_dists = dist[np.arange(len(self.labels)), self.labels]
+        return np.sum(assigned_dists ** 2) / len(self.points)  # Mean squared error
+
 
     def get_centroids(self) -> np.ndarray:
         """
@@ -72,3 +135,6 @@ class KMeans:
             np.ndarray
                 a `k x m` 2D matrix representing the cluster centroids of the fit model
         """
+        if self.centroids is None:
+            raise ValueError("Model has not been fitted yet. Please call 'fit' first.")
+        return self.centroids
