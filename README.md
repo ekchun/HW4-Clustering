@@ -4,7 +4,7 @@
 Implementation of KMeans and Silhouette Scoring
 
 # Eden's Notes
-Used https://github.com/scikit-learn/scikit-learn/blob/d3898d9d5/sklearn/metrics/cluster/_unsupervised.py#L49 to base my silhoutte score on, and https://scikit-learn.org/stable/modules/generated/sklearn.cluster.KMeans.html as reference for Kmenas. Perplexity and Versa (actually worked quite well) for troubleshooting.
+Used https://github.com/scikit-learn/scikit-learn/blob/d3898d9d5/sklearn/metrics/cluster/_unsupervised.py#L49 to base my silhoutte score on, and https://scikit-learn.org/stable/modules/generated/sklearn.cluster.KMeans.html as reference for Kmeans. Along with some other references links, the slides, and the resources linked in this README. Perplexity and Versa (actually worked quite well) for troubleshooting.
 
 Been working on my formatting! Hope it's getting better...? LOL. Felt like I definitely got a better grasp on the API section of this assignment and splitting functions up.
 
