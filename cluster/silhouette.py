@@ -5,12 +5,31 @@ from scipy.spatial.distance import cdist
 class Silhouette:
     def __init__(self):
         """
+
         inputs:
             none
+
         """
 
-    def score(self, X: np.ndarray, y: np.ndarray) -> np.ndarray:
+    def _sil_validation(self, X: np.ndarray, y: np.ndarray):
         """
+
+        validates inputs for silhouette score calculation
+
+        """
+
+        if X.ndim != 2:
+            raise ValueError("X must be 2D")
+
+        if len(X) != len(y):
+            raise ValueError("X and y must have the same number of samples")
+
+        if len(np.unique(y)) < 2:
+            raise ValueError("Silhouette undefined for < 2 clusters")
+
+    def scores(self, X: np.ndarray, y: np.ndarray) -> np.ndarray:
+        """
+
         calculates the silhouette score for each of the observations
         s(i) = (b(i) - a(i)) / max(a(i), b(i))
 
@@ -24,7 +43,9 @@ class Silhouette:
         outputs:
             np.ndarray
                 a 1D array with the silhouette scores for each of the observations in `X`
+
         """
+        self._sil_validation(X, y)
         dist_matrix = cdist(X, X) # pairwise distance matrix
 
         unique_labels = np.unique(y) # Get unique cluster labels, why?
@@ -48,3 +69,12 @@ class Silhouette:
         
             sil_scores[i] = (b - a) / max(a, b)
         return sil_scores
+
+    def score(self, X: np.ndarray, y: np.ndarray) -> float:
+        """
+    
+        calculates the average silhouette score
+
+        """
+
+        return np.mean(self.scores(X, y))

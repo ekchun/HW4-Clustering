@@ -1,7 +1,12 @@
+![Build Status](https://github.com/ekchun/HW4-Clustering/actions/workflows/test.yml/badge.svg)
+
 # Assignment 4
 Implementation of KMeans and Silhouette Scoring
 
-# Assignment
+# Eden's Notes
+Used https://github.com/scikit-learn/scikit-learn/blob/d3898d9d5/sklearn/metrics/cluster/_unsupervised.py#L49 to base my silhoutte score on, and https://scikit-learn.org/stable/modules/generated/sklearn.cluster.KMeans.html as reference for Kmenas. Perplexity and Versa (actually worked quite well) for troubleshooting.
+
+Been working on my formatting! Hope it's getting better...? LOL. Felt like I definitely got a better grasp on the API section of this assignment and splitting functions up.
 
 ## Overview
 The goal of this assignment is to implement the k-means clustering algorithm and the silhouette scoring metric. 
@@ -71,17 +76,17 @@ scores = silhouette.score(labels)
 
 [ TODO ] Complete the KMeans class with your implementation of the algorithm
 
-  [ ] complete the `fit` method  
-  [ ] complete the `predict` method  
-  [ ] complete the `get_error` method  
-  [ ] complete the `get_centroid` method  
+  [x] complete the `fit` method  
+  [x] complete the `predict` method  
+  [x] complete the `get_error` method  
+  [x] complete the `get_centroid` method  
 
 [ TODO ] Complete the Silhouette class with your implementation of the metric
-  [ ] complete the `score` method  
+  [x] complete the `score` method  
 
 [ TODO ] Unit Testing  
-  [ ] KMeans Class  
-  [ ] Silhouette Class -- make sure to test against sklearn
+  [x] KMeans Class  
+  [x] Silhouette Class -- make sure to test against sklearn
 
 [ TODO ] Packaging  
   [ ] pip installable module  
@@ -120,7 +125,7 @@ m_clusters, m_labels = make_clusters(k=10)
 # here we are directly controlling the dimensionality of our data 
 #   1000 observations 
 #   200 features 
-#   3 clusters)
+#   3 clusters
 d_clusters, d_labels = make_clusters(n=1000, m=200, k=3)
 
 
@@ -164,7 +169,7 @@ Make sure to push all your code to github, ensure that your unit tests are corre
   * Correctly exits on iteration number or tolerance (1)
   * Functionality is reasonable on test data (1) 
 * Silhouette implementation (2)
-  * Silhouette score  correctly implemented (1)
+  * Silhouette score correctly implemented (1)
   * Silhouette score is reasonably close to sklearn implementation (1)
 * Unit tests (2)
 * Handles edge cases/error checks (1) 

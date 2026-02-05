@@ -23,6 +23,7 @@ class KMeans:
         self.k = k
         self.tol = tol
         self.max_iter = max_iter
+        self.centroids = None  # to be set after fitting
 
         if self.k <= 0:
             raise ValueError("k must be positive")
@@ -51,6 +52,22 @@ class KMeans:
         centroids = mat[indices]
         return centroids
 
+    def _fit_validation(self, mat: np.ndarray):
+        """
+        Validates the input matrix for fitting.
+
+        """
+        if mat.ndim != 2:
+            raise ValueError("Input must be (n_samples, n_features)")
+
+        n_features = mat.shape[1]
+
+        if hasattr(self, "n_features_"):
+            if n_features != self.n_features_:
+                raise ValueError("Mismatched feature dimensions")
+        else:
+            self.n_features_ = n_features
+
     def fit(self, mat: np.ndarray):
         """
         Fits the kmeans algorithm onto a provided 2D matrix.
@@ -66,6 +83,8 @@ class KMeans:
             mat: np.ndarray
                 A 2D matrix where the rows are observations and columns are features
         """
+        self._fit_validation(mat)
+        
         centroids = self._initialize_centroids(mat)
 
         for i in range(self.max_iter):
