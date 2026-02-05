@@ -1,5 +1,9 @@
 import numpy as np
-import matplotlib.pyplot as plt
+try:
+    import matplotlib.pyplot as plt
+except ImportError:
+    plt = None
+
 
 def make_clusters(
         n: int = 500, 
