@@ -58,7 +58,7 @@ def test_high_dimensional():
     assert np.all(scores <= 1)
 
 
-def test_single_cluster_raises_error():
+def test_single_cluster():
     """
 
     Test that 1 cluster raises a ValueError.
@@ -72,7 +72,7 @@ def test_single_cluster_raises_error():
         Silhouette().score(X, labels)
 
 
-def test_mismatched_shapes_raise_error():
+def test_mismatch():
     """
 
     Test for mismatch between data and labels.
